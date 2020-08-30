@@ -1,5 +1,6 @@
 const express = require ('express')
 const routes = express.Router ()
+const multer = require ('./app/middlewares/multer')
 const ProductController = require ('./app/controllers/ProductController')
 
 routes // rota da minha página inicial 
@@ -9,9 +10,11 @@ routes // rota da minha página inicial
 
 routes // rotas dos produtos da minha plataforma
 .get ('/products/create', ProductController.create)
+.get ('/products/:id', ProductController.show)
 .get ('/products/:id/edit', ProductController.edit)
-.post ('/products', ProductController.post)
-.put ('/products', ProductController.put)
+
+.post ('/products', multer.array('photos', 6), ProductController.post)
+.put ('/products', multer.array('photos', 6), ProductController.put)
 .delete ('/products', ProductController.delete)
 
 routes // shortcuts

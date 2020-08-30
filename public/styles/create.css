@@ -61,7 +61,6 @@ form .item select {
 form .item select option {
     background-color: whitesmoke;
 }
-
 form .item textarea {
     min-height: 150px;
     -webkit-appearance: none;
@@ -129,7 +128,7 @@ form .item #photos-preview img {
     left: 0;
 
     background-color: rgba(255,255,255, 0.4);
-    color: rgb(255, 0, 0);
+    color: #e72828;
 
     width: 100%;
     height: 100%;

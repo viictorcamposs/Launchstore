@@ -100,7 +100,7 @@ const photosUpload = {
     getRemoveButton() {
         const button = document.createElement ('i')
         button.classList.add ('material-icons')
-        button.innerHTML = 'close'
+        button.innerHTML = 'delete'
         return button
     },
     removeImage ( event ) {
@@ -112,5 +112,45 @@ const photosUpload = {
         photosUpload.input.files = photosUpload.getAllFiles()
 
         imageContainer.remove()
+    },
+    removeOldImage ( event ) {
+        const photoDiv = event.target.parentNode
+
+        if ( photoDiv.id ) {
+            const removedFiles = document.querySelector ('input[name="removed_files"]')
+            if ( removedFiles ) removedFiles.value += `${ photoDiv.id },`
+        }
+
+        photoDiv.remove()
     }
 }
+
+const imageGallery = {
+    hightlight: document.querySelector ('.gallery .highlight > img'),
+    previews: document.querySelectorAll ('.gallery-preview img'),
+    setImage ( event ) {
+        const { target } = event 
+
+        imageGallery.previews.forEach ( preview => preview.classList.remove ('active'))
+        target.classList.add ('active')
+
+        imageGallery.hightlight.src = target.src 
+        lightbox.image.src = target.src
+    }
+}
+
+const lightbox = {
+    target: document.querySelector ('.lightbox-target'),
+    image: document.querySelector ('.lightbox-target img'),
+    closeButton: document.querySelector ('.lightbox-target a.lightbox-close'),
+    open() {
+        lightbox.target.style.opacity = 1
+        lightbox.target.style.top = 0
+        lightbox.closeButton.style.top = 0
+    },
+    close() {
+        lightbox.target.style.opacity = 0
+        lightbox.target.style.top = "-100%"
+        lightbox.closeButton.style.top = "-80px"
+    }
+} 

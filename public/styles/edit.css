@@ -6,11 +6,11 @@
     background-color: #eb0000;
 }
 .button.edit {
-    background-color: #157ec4;
+    background-color: var(--secondary-color);
     margin: 0;
 }
 .button.edit:hover {
-    background-color: #04438b;
+    background-color: var(--secondary-shadow-color);
 }
 
 form .item span:nth-child(1) {

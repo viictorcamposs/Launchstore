@@ -3,7 +3,7 @@ const db = require ( '../../config/db' )
 module.exports = {
     create ( data ) {
         const query = `
-            insert into products (
+            INSERT INTO products (
                 category_id,
                 user_id,
                 name,
@@ -12,8 +12,8 @@ module.exports = {
                 price,
                 quantity,
                 status
-            ) values ($1, $2, $3, $4, $5, $6, $7, $8)
-            returning id
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            RETURNING id
         `
 
         data.price = data.price.replace (/\D/g, "")
@@ -33,14 +33,14 @@ module.exports = {
     },
     find ( id ) {
         return db.query (`
-            select *
-            from products
-            where id = $1
+            SELECT * 
+            FROM products 
+            WHERE id = $1
         `, [id])
     },
     update ( data ) {
         const query = `
-            update products set
+            UPDATE products SET
                 category_id = ($1),
                 user_id = ($2),
                 name = ($3),
@@ -49,7 +49,7 @@ module.exports = {
                 price = ($6),
                 quantity = ($7),
                 status = ($8)
-            where id = $9
+            WHERE id = $9
         `
         const values = [
             data.category_id,
@@ -67,8 +67,15 @@ module.exports = {
     },
     delete ( id ) {
         return db.query (`
-            delete from products
-            where id = $1
+            DELETE FROM products
+            WHERE id = $1
         `, [id])
+    },
+    files ( id ) { 
+        return db.query (`
+            SELECT * 
+            FROM files
+            WHERE product_id = $1
+        `, [id]) 
     }
 }
