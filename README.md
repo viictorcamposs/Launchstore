@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="public/readme/mockuper.png" alt="Launchstore" width="300">
+  <img src="public/readme/mockuper.png" alt="Launchstore" width="500">
 
 
 
