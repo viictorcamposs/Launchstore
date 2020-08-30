@@ -68,7 +68,7 @@ module.exports = {
     delete ( id ) {
         return db.query (`
             DELETE FROM products
-            WHERE id = $1
+            WHERE id = $1 
         `, [id])
     },
     files ( id ) { 
