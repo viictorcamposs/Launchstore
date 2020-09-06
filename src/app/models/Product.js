@@ -1,7 +1,12 @@
-const db = require ( '../../config/db' )
+const db = require('../../config/db')
 
 module.exports = {
-    create ( data ) {
+    all() {
+        return db.query(`
+            SELECT * FROM products ORDER BY updated_at DESC
+        `)
+    },
+    create(data) {
         const query = `
             INSERT INTO products (
                 category_id,
@@ -16,7 +21,7 @@ module.exports = {
             RETURNING id
         `
 
-        data.price = data.price.replace (/\D/g, "")
+        data.price = data.price.replace(/\D/g, "")
 
         const values = [
             data.category_id,
@@ -29,16 +34,16 @@ module.exports = {
             data.status || 1
         ]
 
-        return db.query ( query, values )
+        return db.query(query, values)
     },
-    find ( id ) {
-        return db.query (`
+    find(id) {
+        return db.query(`
             SELECT * 
             FROM products 
             WHERE id = $1
         `, [id])
     },
-    update ( data ) {
+    update(data) {
         const query = `
             UPDATE products SET
                 category_id = ($1),
@@ -63,19 +68,45 @@ module.exports = {
             data.id,
         ]
 
-        return db.query ( query, values )
+        return db.query(query, values)
     },
-    delete ( id ) {
-        return db.query (`
+    delete(id) {
+        return db.query(`
             DELETE FROM products
             WHERE id = $1 
         `, [id])
     },
-    files ( id ) { 
-        return db.query (`
+    files(id) { 
+        return db.query(`
             SELECT * 
             FROM files
             WHERE product_id = $1
         `, [id]) 
+    },
+    search(params) {
+        const {filter, category} = params
+
+        let query = '',
+            filterQuery = `WHERE`
+        
+        if(category) {
+            filterQuery = `${filterQuery}
+                products.category_id = ${category}
+                AND`
+        }
+
+        filterQuery = `
+            ${filterQuery}
+            products.name ILIKE '%${filter}%'
+        `
+        query = `
+            SELECT products.*,
+                categories.name AS category_name
+            FROM products 
+            LEFT JOIN categories ON products.category_id = categories.id
+            ${filterQuery}
+        `
+
+        return db.query(query)
     }
 }
