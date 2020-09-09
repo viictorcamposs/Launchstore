@@ -2,15 +2,22 @@ const nunjucks = require ('nunjucks')
 const express = require ('express')
 const routes = require ('./routes')
 const methodOverride = require ('method-override')
+const session = require('./config/session')
 
 const server = express ()
  
-server.use (express.urlencoded ( { extended: true } ))
-server.use (express.static ('public'))
-server.use (methodOverride ('_method'))
-server.use (routes)
+server
+.use(session)
+.use((req, res, next) => {
+  res.locals.session = req.session
+  next()
+}) 
+.use (express.urlencoded ( { extended: true } ))
+.use (express.static ('public'))
+.use (methodOverride ('_method'))
+.use (routes)
 
-server.set ('view engine', 'njk')
+.set ('view engine', 'njk')
 
 nunjucks.configure ('src/app/views', {
   express: server,

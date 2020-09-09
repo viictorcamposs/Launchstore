@@ -20,3 +20,6 @@
 .messages.error {
     background: #e74c3c;
 }
+.messages.success {
+    background-color: #83e730;
+}

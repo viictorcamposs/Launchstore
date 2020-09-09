@@ -25,7 +25,7 @@ module.exports = {
 
         const values = [
             data.category_id,
-            data.user_id || 1,
+            data.user_id,
             data.name,
             data.description,
             data.old_price || data.price,
@@ -71,12 +71,16 @@ module.exports = {
         return db.query(query, values)
     },
     async delete(id) {
-        await db.query(`DELETE FROM files WHERE product_id = $1`, [id])
-
-        return db.query(`
+        try {
+            await db.query(`DELETE FROM files WHERE product_id = $1`, [id])
+            
+            return db.query(`
             DELETE FROM products
             WHERE id = $1 
-        `, [id])
+            `, [id])
+        } catch (error) {
+            console.log(`Database Error => ${error}`)
+        }
     },
     files(id) { 
         return db.query(`

@@ -4,12 +4,15 @@ const routes = express.Router ()
 const SessionController = require ('../app/controllers/SessionController')
 const UserController = require ('../app/controllers/UserController')
 
-const Validator = require('../app/validators/user')
+const UserValidator = require('../app/validators/user')
+const SessionValidator = require('../app/validators/session')
 
-// routes // Login - Logout 
-// .get('/login', SessionController.loginForm)
-// .post('/login', SessionController.login)
-// .post('/logout', SessionController.logout)
+const { isLoggedRedirectToUsers, onlyUsers } = require('../app/middlewares/session')
+
+routes // Login - Logout 
+.get('/login', isLoggedRedirectToUsers, SessionController.loginForm)
+.post('/login', SessionValidator.login, SessionController.login)
+.post('/logout', SessionController.logout)
 
 // routes // Reset Password - Forgot Password
 // .get('/forgot-password', SessionController.forgotForm)
@@ -19,10 +22,10 @@ const Validator = require('../app/validators/user')
 
 routes // User Register
 .get('/register', UserController.registerForm)
-.post('/register', Validator.post, UserController.post)
+.post('/register', UserValidator.post, UserController.post)
 
-.get('/', UserController.show)
-// .put('/', UserController.update)
+.get('/', onlyUsers, UserValidator.show, UserController.show)
+.put('/', onlyUsers, UserValidator.update,UserController.update)
 // .delete('/', UserController.delete)
 
 module.exports = routes

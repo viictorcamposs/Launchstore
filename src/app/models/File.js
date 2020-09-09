@@ -3,26 +3,29 @@ const fs = require ('fs')
 
 module.exports = {
     create ({ filename, path, product_id }) {
-        const query = `
-            INSERT INTO files (
-                name,
+        try {
+            const query = `
+                INSERT INTO files (
+                    name,
+                    path,
+                    product_id
+                ) VALUES ($1, $2, $3)
+                RETURNING id
+            `
+    
+            const values = [
+                filename,
                 path,
                 product_id
-            ) VALUES ($1, $2, $3)
-            RETURNING id
-        `
-
-        const values = [
-            filename,
-            path,
-            product_id
-        ]
-
-        return db.query ( query, values )
+            ]
+    
+            return db.query ( query, values )
+        } catch (error) {
+            console.log(`Database Error => ${error}`)
+        }
     },
     async delete ( id ) {
         try {
-            
             const result = await db.query (`
                 SELECT * 
                 FROM files 
