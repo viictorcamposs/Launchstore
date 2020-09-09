@@ -9,7 +9,6 @@ section.form {
     max-width: 700px;
     width: 90%;
 }
-
 section.form .header h3 {
     font-size: 14px;
     line-height: 24px;
@@ -23,7 +22,6 @@ section.form .header h3 {
 form .item {
     margin-bottom: 16px;
 }
-
 form .item > div:nth-child(1) {
     color: #777;
     text-transform: uppercase;
@@ -31,7 +29,6 @@ form .item > div:nth-child(1) {
     font-weight: bold;
     margin-bottom: 8px;
 }
-
 form .item input[type="text"],
 form .item input[type="number"],
 form .item textarea,
@@ -44,7 +41,6 @@ form .item select {
     font-size: 16px;
     outline: none;
 }
-
 form .item select {
     /* permitir select style */
     -moz-appearance: none;

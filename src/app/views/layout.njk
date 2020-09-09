@@ -3,16 +3,16 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<link rel="stylesheet" href="/styles/layout.css">
 		
 		{% block head %}
+			<title>Launchstore</title>
 		{% endblock %}
 	
-		<title>Launchstore</title>
+		{% include 'parts/styles.njk' %}
 	</head>
 	<body>
+		{% include 'parts/messages.njk' %}
+
 		{% include 'parts/header.njk' %}
 
 		{% block content %}{% endblock %}

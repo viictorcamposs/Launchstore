@@ -70,7 +70,9 @@ module.exports = {
 
         return db.query(query, values)
     },
-    delete(id) {
+    async delete(id) {
+        await db.query(`DELETE FROM files WHERE product_id = $1`, [id])
+
         return db.query(`
             DELETE FROM products
             WHERE id = $1 

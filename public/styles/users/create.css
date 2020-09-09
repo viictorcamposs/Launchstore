@@ -1,0 +1,66 @@
+section.form {
+    background-color: white;
+    padding: 32px 24px;
+    margin: 32px auto;
+    box-shadow: 2px 2px 2px -4px rgb(80,80,80); /* eixo X, eixo Y, blur, spread */
+    border: 1px solid #efefef;
+    border-radius: 4px;
+    max-width: 700px;
+    width: 90%;
+}
+section.form .header h3 {
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-bottom: 16px;
+}
+
+/* formulário de cadastro */
+form .item {
+    margin-bottom: 16px;
+}
+form .item > div:nth-child(1) {
+    color: #777;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+form .item .input input {
+    width: 100%;
+    height: 42px;
+    padding: 8px 16px;
+    box-shadow: 2px 2px 2px -4px rgba(63,63,63, 1);
+    border: 1px solid #efefef;
+    border-radius: 4px;
+    font-size: 14px;
+    outline: none;
+    color: #333;
+}
+.user-register.container.form {
+    max-width: 500px;
+}
+.password,
+.cpf_cnpj {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 8px;
+}
+.button {
+    margin-top: 32px;
+}
+
+/* validate errors */
+.input .error {
+    background-color: #e74c3c;
+    color: white;
+    padding: 4px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 14px;
+    width: 100px;
+    text-align: center;
+} 

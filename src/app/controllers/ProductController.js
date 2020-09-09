@@ -4,7 +4,7 @@ const Category = require ('../models/Category')
 const Product = require ('../models/Product')
 const File = require ('../models/File')
 
-
+ 
 module.exports = {
     async create ( req, res ) {
         // pegar categorias 
@@ -110,6 +110,7 @@ module.exports = {
          
     },
     async delete ( req, res ) {
+        await File.delete(req.body.id)
         await Product.delete ( req.body.id )
         return res.redirect ('/products/create')
     }
