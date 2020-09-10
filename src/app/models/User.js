@@ -1,6 +1,9 @@
 const db = require ( '../../config/db' )
 const { hash } = require('bcryptjs')
 
+const Product = require('../models/Product')
+const fs = require('fs')
+
 module.exports = {
     async findOne (filters) {
         try {
@@ -55,7 +58,7 @@ module.exports = {
         try {
             let query = `UPDATE users SET`
         
-            Object.keys(fields).map(async (key, index, array) => {
+            Object.keys(fields).map((key, index, array) => {
                 if((index + 1) < array.length) {
                     query = `${query}
                         ${key} = '${fields[key]}',
@@ -66,9 +69,38 @@ module.exports = {
                         WHERE id = ${id}
                     `
                 }
+            })
+
+            await db.query(query)
+            return
+        } catch (error) {
+            console.log(`Database Error => ${error}`)
+        }
+    },
+    async delete(id) { 
+        try {
+            // Pegar todos os produtos
+            let results = await db.query('SELECT * FROM products WHERE user_id = $1', [id])
+            const products = results.rows
     
-                await db.query(query)
-                return
+            // Pegar todas as imagens
+            const allFilesPromise = products.map(product =>
+                Product.files(product.id))
+                
+            let promiseResults = await Promise.all(allFilesPromise)
+    
+            // Rodar o delete do usuário no sistema
+            await db.query('DELETE FROM users WHERE id = $1', [id])
+    
+            // Remover as imagens da pasta public
+            promiseResults.map(results => {
+                results.rows.map(file => {
+                    try {
+                        fs.unlinkSync(file.path)
+                    } catch (error) {
+                        console.log(`Database Error => ${error}`)
+                    }
+                })
             })
         } catch (error) {
             console.log(`Database Error => ${error}`)
