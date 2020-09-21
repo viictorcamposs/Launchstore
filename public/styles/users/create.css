@@ -40,9 +40,7 @@ form .item .input input {
     outline: none;
     color: #333;
 }
-.user-register.container.form {
-    max-width: 500px;
-}
+
 .password,
 .cpf_cnpj {
     display: grid;

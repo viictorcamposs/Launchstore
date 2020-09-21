@@ -1,4 +1,5 @@
 {% extends 'layout.njk' %}
+{% import 'parts/card.njk' as card %}
 
 {% block head %}
     <link rel="stylesheet" href="/styles/users/create.css">
@@ -6,11 +7,8 @@
 {% endblock %}
 
 {% block content %}
-    <section class="user-dashboard container form">
+    {% call card.render ('Detalhes', 'password container') %}
         <form action="/users?_method=PUT" method="post">
-            <div class="header">
-                <h3>Detalhes</h3>
-            </div>
             <div class="fields">
                 {% include 'user/fields.njk' %}
                 <input type="hidden" name="id" value="{{ user.id }}">
@@ -22,8 +20,8 @@
             <input type="hidden" name="id" value="{{ user.id }}">
             <button type="submit" class="button delete">Deletar</button>
         </form>
-    </section>
-
+    {% endcall %}
+    
     <script>
         const formDelete = document.querySelector ('#form-delete')
         formDelete.addEventListener ('submit', ( event ) => {

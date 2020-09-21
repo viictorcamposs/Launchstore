@@ -39,17 +39,17 @@
 				name="photos" 
 				multiple
 				accept="image/*"
-				onchange="photosUpload.handleFile ( event )"
+				onchange="photosUpload.handleFile(event)"
 			>
 			<p>Selecione até 6 fotos</p>
 		</div>
 		<div id="photos-preview">
-			{% if files %}
-				{% for image in files %}
+			{% if product.files %}
+				{% for image in product.files %}
 					<div class="photo" id="{{ image.id }}">
 						<img src="{{ image.src }}" alt="{{ image.name }}">
 						<i class="material-icons"
-							onclick="photosUpload.removeOldImage ( event )">
+							onclick="photosUpload.removeOldImage(event)">
 							delete
 						</i>
 					</div>
@@ -67,7 +67,7 @@
             type="text"
             name="price"
             placeholder="Preço do produto"
-            value="{{ product.price }}"
+            value="{{ product.formatedPrice }}"
 			onkeydown="Mask.apply ( this, 'formatBRL')"
             >
 	</div> 

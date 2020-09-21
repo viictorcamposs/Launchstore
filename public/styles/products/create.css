@@ -1,4 +1,7 @@
 /* products form */
+.product-create.container {
+    max-width: 650px;
+}
 section.form {
     background-color: white;
     padding: 32px 24px;

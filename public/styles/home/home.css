@@ -1,6 +1,6 @@
 /* SHOP */
 .shop h2 {
-    margin: 48px 0;
+    margin: 32px 0;
 }
 .shop .items {
     display: grid;
@@ -41,8 +41,6 @@
 .search-products {
     display: grid;
     grid-template-columns: 200px 1fr;
-
-    margin-top: 48px;
 }
 .search-products .header {
     margin-bottom: 48px;
@@ -52,7 +50,7 @@
 }
 .search-products .header h2 {
     font-size: 26px;
-    text-transform: capitalize;
+    text-transform: uppercase;
 
     margin-bottom: 8px;
 }
@@ -73,4 +71,7 @@
 .search-products nav ul li a:hover {
     color: black;
     font-weight: bold;
+}
+.search-products.container.searched {
+    margin: 32px auto;
 }
