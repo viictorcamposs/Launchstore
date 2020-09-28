@@ -24,7 +24,7 @@
                         Novo Anúncio
                     </a>
                 </li>
-                <li class="accounts">
+                <li class="dropdown-container">
                     {% if not session.userId %}
                         <a href="/accounts">
                             <i class="material-icons">account_circle</i>
@@ -36,7 +36,7 @@
                             <i class="material-icons">account_circle</i>
                             Minha Conta
                         </a>
-                        <ul class="submenu">
+                        <ul class="dropdown">
                             <li>
                                 <a href="/users">Minha conta</a>
                             </li>
@@ -44,8 +44,14 @@
                                 <a href="/users/ads">Meus anúncios</a>
                             </li>
                             <li>
+                                <a href="/orders">Meus Pedidos</a>
+                            </li>
+                            <li>
+                                <a href="/orders/sales">Minhas Vendas</a>
+                            </li>
+                            <li>
                                 <form action="/users/logout" method="post">
-                                    <button type="submit">Sair</button>
+                                    <button type="submit" class="action-button">Sair</button>
                                 </form>
                             </li>
                         </ul>

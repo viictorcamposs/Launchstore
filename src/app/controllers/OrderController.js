@@ -1,9 +1,9 @@
-const LoadService = require('../services/LoadProductService')
+const LoadProductService = require('../services/LoadProductService')
+const LoadOrderService = require('../services/LoadOrderService')
 const User = require('../models/User')
 const Order = require('../models/Order')
 
 const mailer = require('../../lib/mailer')
-const { formatPrice, date } = require('../../lib/utils')
 const Cart = require('../../lib/cart')
 
 const email = (seller, product, buyer) => `
@@ -28,48 +28,26 @@ const email = (seller, product, buyer) => `
 module.exports = {
     async index(req, res) {
         // PEGAR OS PEDIDOS DO USUÁRIO
-        let orders = await Order.findAll({ where: { buyer_id: req.session.userId}})
-
-        const getOrdersPromise = orders.map(async order => {
-            // DETALHES DO PRODUTO
-            order.product = await LoadService.load('products', {
-                where: { id: order.product_id}
-            })
-
-            // DETALHES DO COMPRADOR 
-            order.buyer = await User.findOne({
-                where: { id: order.buyer_id }
-            })
-
-            // DETALHES DO VENDEDOR
-            order.seller = await User.findOne({
-                where: { id: order.seller_id }
-            }) 
-
-            // FORMATAÇÃO DE PREÇO
-            order.formatedPrice = formatPrice(order.price) 
-            order.formatedTotal = formatPrice(order.total) 
-
-            // FORMATAÇÃO DO STATUS 
-            const orderStatus = {
-                open: 'Aberto',
-                sold: 'Vendido',
-                canceled: 'Cancelado'
-            }
-
-            order.formatedStatus = orderStatus[order.status]
-
-            // FORMATAÇÃO DE ATUALIZAÇÃO
-            const updatedAt = date(order.updated_at)
-            const updatedDate = `${updatedAt.day}/${updatedAt.month}/${updatedAt.year}`
-            order.formatedUpdatedAt = `${order.formatedStatus} em ${updatedDate} às ${updatedAt.hour}h${updatedAt.minutes}`
-
-            return order
+        const orders = await LoadOrderService.load('orders', {
+            where: { buyer_id: req.session.userId }
         })
 
-        orders = await Promise.all(getOrdersPromise)
-
         return res.render('order/index', { orders })
+    },
+    async sales(req, res) {
+        // PEGAR OS PEDIDOS DO USUÁRIO
+        const sales = await LoadOrderService.load('orders', {
+            where: { seller_id: req.session.userId }
+        })
+
+        return res.render('order/sales', { sales })
+    },
+    async show(req, res) {
+        const order = await LoadOrderService.load('order', {
+            where: { id: req.params.id }
+        })
+
+        return res.render('order/details', { order })
     },
     async post(req, res) {
         try {
@@ -98,7 +76,7 @@ module.exports = {
                 })
 
                 // PEGAR DADOS DO PRODUTO
-                product = await LoadService.load('product', {
+                product = await LoadProductService.load('product', {
                     where: {id: product_id}
                 })
 
@@ -131,6 +109,43 @@ module.exports = {
         } catch (error) {
             console.error(error)
             return res.render('order/error')
+        }
+    },
+    async update(req, res) {
+        try {
+            // TIRAR ID E ACTION DOS PARÂMETROS
+            const { id, action } = req.params
+            
+            const acceptedActions = ['close', 'cancel']
+            if(!acceptedActions.includes(action)) return res.send('Não funcionando!')
+            
+            // PEGAR PEDIDO
+            const order = await LoadOrderService.load('order', {
+                where: { id }
+            })
+
+            if(!order) return res.render('Não achou o pedido')
+
+            // VERIFICAR SE O MESMO ESTÁ ABERTO
+            if(order.status != 'open') return res.send('Não é possível realizar essa ação')
+
+            //ATUALIZAR O PEDIDO
+            const orderStatus = {
+                close: 'sold',
+                cancel: 'canceled'
+            }
+
+            order.status = orderStatus[action]
+
+            await Order.update(id, {
+                status: order.status
+            })
+
+            // REDIRECIONAR
+            return res.redirect('/orders/sales')
+
+        } catch (error) {
+            console.error(error)
         }
     }
 }
